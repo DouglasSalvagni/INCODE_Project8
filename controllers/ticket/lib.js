@@ -9,6 +9,7 @@ function create(req, res) {
 		var ticket = {
 			title: req.body.title,
 			description: req.body.description,
+			creator: req.session.user.email,
 			responsible: req.body.responsible,
 			priority: req.body.priority
 		}

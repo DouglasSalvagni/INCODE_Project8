@@ -42,6 +42,7 @@ async function signup(req, res) {
                     })
                 } else {
                     req.session.token = user.getToken();
+                    req.session.user = user;
                     res.redirect('../../ticket/');
                 }
             })
@@ -94,6 +95,7 @@ function login(req, res) {
                 const validPass = await bcrypt.compare(req.body.password, user.password);
                 if (validPass) {
                     req.session.token = user.getToken();
+                    req.session.user = user;
                     res.redirect('../../ticket/');
                 }
                 else{
