@@ -7,7 +7,7 @@
 
 ### Features
 
-- [ ] Administrator user
+- [x] Administrator user
 - [x] Track ticket creator
 - [ ] Comments tickets
 - [ ] Display img/icon to ticket status (processed or unprocessed)
