@@ -1,6 +1,7 @@
 const User = require('../../schema/schemaUser.js');
+const bcrypt = require('bcryptjs');
 
-function signup(req, res) {
+async function signup(req, res) {
     if (!req.body.email || !req.body.password) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         console.log(req.body);
@@ -8,9 +9,13 @@ function signup(req, res) {
             "text": "Requête invalide"
         })
     } else {
+        //Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.password, salt);
+
         var user = {
             email: req.body.email,
-            password: req.body.password
+            password: hashPassword
         }
         var findUser = new Promise(function (resolve, reject) {
             User.findOne({
@@ -74,7 +79,7 @@ function login(req, res) {
     } else {
         User.findOne({
             email: req.body.email
-        }, function (err, user) {
+        }, async function (err, user) {
             if (err) {
                 res.status(500).json({
                     "text": "Erreur interne"
@@ -86,7 +91,8 @@ function login(req, res) {
                 })
             }
             else {
-                if (user.authenticate(req.body.password)) {
+                const validPass = await bcrypt.compare(req.body.password, user.password);
+                if (validPass) {
                     req.session.token = user.getToken();
                     res.redirect('../../ticket/');
                 }
