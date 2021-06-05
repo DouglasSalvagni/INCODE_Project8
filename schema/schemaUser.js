@@ -13,6 +13,11 @@ var userSchema = mongoose.Schema({
 	password: {
         type: String,
         required: true
+    },
+	role: {
+        type: String,
+        default: "user",
+        enum: ["user", "admin"]
     }
 },{ timestamps: { createdAt: 'created_at' }})
 
