@@ -12,6 +12,16 @@
             <h2>Responsable : <%= ticket.responsible %></h2>
             <h2>Priorité : <%= ticket.priority %></h2>
             <h2>Statut : <%= ticket.completed ? "Résolu" : "En cours" %></h2>
+            <form action="/ticket/<%= ticket.id %>/comment" method="POST">
+                <h2><label for="comments">Comment:</label></h2>
+                <textarea name="comment" cols="30" rows="10" style="width:100%;"></textarea>
+                <button type="submit">Submit comment</button>
+            </form>
+            <ul>
+                <% ticket.comments.forEach(element => { %>
+                    <li><%= element.value %> </li>
+                <% }) %>
+            </ul>
         </div>
     </body>
 </html>

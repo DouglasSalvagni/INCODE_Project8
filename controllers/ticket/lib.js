@@ -208,9 +208,55 @@ function list(req, res) {
 	})
 }
 
+function comment(req, res) {
+	const tickedId = req.params.id;
+	const comment = req.body.comment;
+	const newComment = {
+		value: comment,
+	}
+	if(comment === '') res.status(400).json({
+		"text": "Text cannot be empty"
+	});
+	var saveComment = new Promise(function (resolve, reject) {
+		Ticket.findByIdAndUpdate( tickedId, {'$push': {'comments':newComment}}, function (err, result) {
+			if (err) {
+				reject(500);
+			} else {
+				if (result) {
+					resolve(result)
+				} else {
+					reject(200)
+				}
+			}
+		})
+	});
+
+	saveComment.then(function (ticket) {
+		res.redirect(`../${ticket.getId()}`);
+	}, function (error) {
+		switch (error) {
+			case 500:
+				res.status(500).json({
+					"text": "Erreur interne"
+				})
+				break;
+			case 200:
+				res.status(200).json({
+					"text": "Le ticket n'existe pas"
+				})
+				break;
+			default:
+				res.status(500).json({
+					"text": "Erreur interne"
+				})
+		}
+	})
+}
+
 exports.create = create;
 exports.createForm = createForm;
 exports.show = show;
 exports.edit = edit;
 exports.update = update;
 exports.list = list;
+exports.comment = comment;

@@ -25,7 +25,12 @@ var ticketSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
+    comments: [
+        {
+            value: String,
+        }
+    ]
 },{ timestamps: { createdAt: 'created_at' }})
 
 
