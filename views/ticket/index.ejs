@@ -11,6 +11,7 @@
                         <th class="idTicket">Tichet Title</th>
                         <th class="showTicket">Voir Ticket</th>
                         <th class="editTicket">Editer Ticket</th>
+                        <th class="editTicket">Processed</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,6 +21,13 @@
                             <td><%= ticket.title %></td>
                             <td><a href="/ticket/<%= ticket._id %>" class="nav-link">Voir</a></td>
                             <td><a href="/ticket/<%= ticket._id %>/edit" class="nav-link">Editer</a></td>
+                            <td>
+                                <% if (ticket.completed) { %>
+                                    <i class="fas fa-battery-full" style="color:green"></i>
+                                <% } else {%>
+                                    <i class="fas fa-battery-half" style="color:red"></i>
+                                <% } %>
+                            </td>
                         </tr>
                     <% } %>
                 </tbody>
