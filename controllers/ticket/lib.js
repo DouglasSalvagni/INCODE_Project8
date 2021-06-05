@@ -6,24 +6,32 @@ function create(req, res) {
 			"text": "Requête invalide"
 		})
 	} else {
-		var ticket = {
-			title: req.body.title,
-			description: req.body.description,
-			creator: req.session.user.email,
-			responsible: req.body.responsible,
-			priority: req.body.priority
-		}
+		if(req.session.user.role !== "admin") {
+			res.status(400).json({
+				"text": "You don't have permission"
+			})
+		} else {
 
-		var _t = new Ticket(ticket);
-		_t.save(function (err, ticket) {
-			if (err) {
-				res.status(500).json({
-					"text": "Erreur interne"
-				})
-			} else {
-				res.redirect(`${ticket.getId()}`);
+			var ticket = {
+				title: req.body.title,
+				description: req.body.description,
+				creator: req.session.user.email,
+				responsible: req.body.responsible,
+				priority: req.body.priority
 			}
-		})
+	
+			var _t = new Ticket(ticket);
+			_t.save(function (err, ticket) {
+				if (err) {
+					res.status(500).json({
+						"text": "Erreur interne"
+					})
+				} else {
+					res.redirect(`${ticket.getId()}`);
+				}
+			})
+
+		}
 	}
 }
 
